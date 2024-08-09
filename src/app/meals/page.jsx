@@ -1,4 +1,12 @@
 import Meals from "@/components/Meals"
+
+export const metaData = {
+  title: {
+    absolute: "Meals"
+  },
+  description: "Meals Page",
+}
+
 const MealsPage = () => {
   return (
     <div className='p-12'>
