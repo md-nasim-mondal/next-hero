@@ -1,5 +1,5 @@
 "use client";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -41,6 +41,10 @@ const Navbar = () => {
       title: "Posts",
       path: "/posts",
     },
+    {
+      title: "Dashboard",
+      path: "/dashboard",
+    },
   ];
 
   const handler = () => {
@@ -64,23 +68,37 @@ const Navbar = () => {
           </Link>
         ))}
       </ul>
-      {session?.status !== "authenticated" ? (
-        <button onClick={handler} className='bg-white text-cyan-300 p-4'>
-          Login
-        </button>
-      ) : (
-        <button onClick={handler} className=''>
-          Logout
-        </button>
-      )}
 
       <div>
-        <Image src={session?.data?.user?.image} height={50} width={50} alt={session?.data?.user?.name} className="rounded-full w-10 h-10 mx-auto" />
-        <h6>
+        
+        {session?.status !== "authenticated" ? (
+          <button onClick={handler} className='bg-red-400 text-white p-4'>
+            Login
+          </button>
+        ) :
+        (
+          <div className='flex gap-4 items-center'>
+          <h6>
           {session?.data?.user?.name}
           <br />
           {session?.data?.user?.type}
         </h6>
+        <Image
+          src={session?.data?.user?.image}
+          height={50}
+          width={50}
+          alt={session?.data?.user?.name}
+          className='rounded-full w-10 h-10 mx-auto'
+        />
+          <button
+            onClick={() => signOut()}
+            className='bg-red-400
+         text-white p-4 rounded-xl hover:text-black'>
+            Logout
+          </button>
+        </div> 
+        )
+        }
       </div>
     </nav>
   );
