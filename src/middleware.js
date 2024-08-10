@@ -25,7 +25,7 @@ export const middleware = (request) => {
 
   // return NextResponse.redirect(new URL('/about/history', request.url))
 
-  // return NextResponse.next()
+  return NextResponse.next()
 }
 
 // export const config = {
