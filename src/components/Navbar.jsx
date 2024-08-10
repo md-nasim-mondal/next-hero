@@ -1,11 +1,15 @@
-"use client"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import React from "react"
+"use client";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 
 const Navbar = () => {
-  const pathName = usePathname()
-  const router = useRouter()
+  const pathName = usePathname();
+  const router = useRouter();
+  const session = useSession();
+
+  // console.log(session);
 
   const links = [
     {
@@ -36,14 +40,14 @@ const Navbar = () => {
       title: "Posts",
       path: "/posts",
     },
-  ]
+  ];
 
   const handler = () => {
-    router.push("/login")
-  }
+    router.push("api/auth/signin");
+  };
 
   if (pathName.includes("dashboard"))
-    return <div className='bg-green-400'>Dashboard Layout</div>
+    return <div className='bg-green-400'>Dashboard Layout</div>;
   return (
     <nav className='bg-red-500 px-6 py-4 flex justify-between items-center'>
       <h6 className='text-3xl'>
@@ -59,11 +63,17 @@ const Navbar = () => {
           </Link>
         ))}
       </ul>
-      <button onClick={handler} className='bg-white text-cyan-300 p-4'>
-        Login
-      </button>
+      {session?.status !== "authenticated" ? (
+        <button onClick={handler} className='bg-white text-cyan-300 p-4'>
+          Login
+        </button>
+      ) : (
+        <button onClick={handler} className=''>
+          Logout
+        </button>
+      )}
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
