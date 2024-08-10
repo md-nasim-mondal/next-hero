@@ -1,5 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -9,7 +10,7 @@ const Navbar = () => {
   const router = useRouter();
   const session = useSession();
 
-  // console.log(session);
+  console.log(session);
 
   const links = [
     {
@@ -72,6 +73,15 @@ const Navbar = () => {
           Logout
         </button>
       )}
+
+      <div>
+        <Image src={session?.data?.user?.image} height={50} width={50} alt={session?.data?.user?.name} className="rounded-full w-10 h-10 mx-auto" />
+        <h6>
+          {session?.data?.user?.name}
+          <br />
+          {session?.data?.user?.type}
+        </h6>
+      </div>
     </nav>
   );
 };
