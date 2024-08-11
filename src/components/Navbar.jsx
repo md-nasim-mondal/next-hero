@@ -70,35 +70,44 @@ const Navbar = () => {
       </ul>
 
       <div>
-        
         {session?.status !== "authenticated" ? (
-          <button onClick={handler} className='bg-red-400 text-white p-4'>
-            Login
-          </button>
-        ) :
-        (
+          <>
+            <Link href={"/api/auth/signup"}>
+              <button
+                onClick={handler}
+                className='bg-red-400 text-white p-4 mr-4
+              rounded-md'>
+                Sign UP
+              </button>
+            </Link>
+            <button
+              onClick={handler}
+              className='bg-red-400 text-white p-4 rounded-md'>
+              Login
+            </button>
+          </>
+        ) : (
           <div className='flex gap-4 items-center'>
-          <h6>
-          {session?.data?.user?.name}
-          <br />
-          {session?.data?.user?.type}
-        </h6>
-        <Image
-          src={session?.data?.user?.image}
-          height={50}
-          width={50}
-          alt={session?.data?.user?.name}
-          className='rounded-full w-10 h-10 mx-auto'
-        />
-          <button
-            onClick={() => signOut()}
-            className='bg-red-400
+            <h6>
+              {session?.data?.user?.name}
+              <br />
+              {session?.data?.user?.type}
+            </h6>
+            <Image
+              src={session?.data?.user?.image}
+              height={50}
+              width={50}
+              alt={session?.data?.user?.name}
+              className='rounded-full w-10 h-10 mx-auto'
+            />
+            <button
+              onClick={() => signOut()}
+              className='bg-red-400
          text-white p-4 rounded-xl hover:text-black'>
-            Logout
-          </button>
-        </div> 
-        )
-        }
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );

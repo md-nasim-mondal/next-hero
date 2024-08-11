@@ -1,5 +1,7 @@
+import connectDB from "@/lib/connectDB";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
@@ -36,7 +38,9 @@ export const authOptions = {
           null;
         }
         if (email) {
-          const currentUser = users.find((user) => user.email === email);
+          const db = await connectDB();
+          const currentUser = await db.collection("users").findOne({ email });
+          // const currentUser = users.find((user) => user.email === email);
           if (currentUser) {
             if (currentUser.password === password) {
               return currentUser;
@@ -45,6 +49,10 @@ export const authOptions = {
         }
         return null;
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
     }),
   ],
 
@@ -57,7 +65,7 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user.type = token.type
+      session.user.type = token.type;
       return session;
     },
   },
@@ -65,31 +73,31 @@ export const authOptions = {
 
 const handler = NextAuth(authOptions);
 
-const users = [
-  {
-    id: 1,
-    name: "Mehedi",
-    email: "m@gmail.com",
-    type: "admin",
-    password: "password",
-    image: "https://picsum.photos/200/300"
-  },
-  {
-    id: 2,
-    name: "Zihad",
-    email: "z@gmail.com",
-    type: "moderator",
-    password: "password",
-    image: "https://picsum.photos/200/300"
-  },
-  {
-    id: 3,
-    name: "Shakil",
-    email: "s@gmail.com",
-    type: "member",
-    password: "password",
-    image: "https://picsum.photos/200/300"
-  },
-];
+// const users = [
+//   {
+//     id: 1,
+//     name: "Mehedi",
+//     email: "m@gmail.com",
+//     type: "admin",
+//     password: "password",
+//     image: "https://picsum.photos/200/300"
+//   },
+//   {
+//     id: 2,
+//     name: "Zihad",
+//     email: "z@gmail.com",
+//     type: "moderator",
+//     password: "password",
+//     image: "https://picsum.photos/200/300"
+//   },
+//   {
+//     id: 3,
+//     name: "Shakil",
+//     email: "s@gmail.com",
+//     type: "member",
+//     password: "password",
+//     image: "https://picsum.photos/200/300"
+//   },
+// ];
 
 export { handler as GET, handler as POST };
